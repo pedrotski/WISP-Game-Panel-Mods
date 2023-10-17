@@ -1,5 +1,30 @@
 window.addEventListener("load", function () {
+    // Function to set a cookie
+    function setCookie(name, value, days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        let expires = "expires=" + date.toUTCString();
+        document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    }
+
+    // Function to get a cookie
+    function getCookie(name) {
+        let cookieArr = document.cookie.split(';');
+        for(let i = 0; i < cookieArr.length; i++) {
+            let cookiePair = cookieArr[i].split("=");
+            if(name == cookiePair[0].trim()) {
+                return decodeURIComponent(cookiePair[1]);
+            }
+        }
+        return null;
+    }
+
     function showNotificationBar() {
+        // Check if the cookie exists and hides the notification bar
+        if (getCookie("hideNotification") === "true") {
+            return;
+        }
+
         var bar = document.createElement('div');
         bar.setAttribute('id', 'notification-bar');
         bar.innerHTML = '⚠️ There is currently an outage. Please see Discord for more information. <button id="closeNotificationButton">X</button>';
@@ -27,6 +52,9 @@ window.addEventListener("load", function () {
             setTimeout(function() {
                 bar.style.visibility = 'hidden';
             }, 500);
+
+            // Set a cookie that expires in 1 day (24 hours)
+            setCookie("hideNotification", "true", 1);
         }
 
         var closeButton = document.getElementById('closeNotificationButton');

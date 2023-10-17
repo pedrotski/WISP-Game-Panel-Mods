@@ -1,4 +1,7 @@
 window.addEventListener("load", function () {
+    // Test mode toggle (set to true for testing or displaying the notification on every page load)
+    var testMode = false;
+
     // Function to set a cookie
     function setCookie(name, value, days) {
         let date = new Date();
@@ -20,8 +23,8 @@ window.addEventListener("load", function () {
     }
 
     function showNotificationBar() {
-        // Check if the cookie exists and hides the notification bar
-        if (getCookie("hideNotification") === "true") {
+        // If not in test mode, check if the cookie exists and hide the notification bar
+        if (!testMode && getCookie("hideNotification") === "true") {
             return;
         }
 
@@ -68,7 +71,7 @@ window.addEventListener("load", function () {
 
         setTimeout(function() {
             bar.style.visibility = 'visible';
-            bar.offsetHeight;
+            bar.offsetHeight; // Triggering reflow for transition to take effect
             
             bar.style.top = '0';
             bar.style.opacity = '1';
